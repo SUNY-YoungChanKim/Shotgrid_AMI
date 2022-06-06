@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<style>
+    .Body{
+        color: rgba(0, 0,0,0.5);
+        background-image: url("https://media.giphy.com/media/1H8sdPP3JDAR5iY0Yv/giphy.gif");
+        background-size: 100vw 100vh;
+        animation: fadein 2s;
+        -moz-animation: fadein 2s; /* Firefox */
+        -webkit-animation: fadein 2s; /* Safari and Chrome */
+        -o-animation: fadein 2s; /* Opera */
+    }
+    table
+    {
+        font-family: 'OTWelcomeBA';
+        font-size: 1vmin;
+        color: aliceblue;
+        border-collapse: collapse;
+    }
+    tr
+    {
+
+
+    }
+    th
+    {
+        top: 0%;
+        border: 0.1px solid #EAD3A8;
+        font-size: 1.5vmin;
+        border-collapse: collapse;
+        position: sticky;
+        background-color: crimson;
+        width: 25vmin
+    }
+    td
+    {
+        border: 1px solid #EAD3A8;
+        font-size: 1vmin;
+        text-align: center;
+        width: 25vmin
+    }
+    .Content
+    {
+        margin-left: 2.5vw;
+        margin-top: 2.5vh;
+        width: 95vw;
+        height: 95vh;
+        background-color: rgba(0,0,0,0.6);
+        border-radius: 0.5%;
+    }
+    .Left
+    {
+        width: 45%;
+        height: 100%;
+        float: left;
+        vertical-align: middle;
+    }
+    .Center
+    {
+        width: 10%;
+        height: 100%;
+        float: left;
+        display: inline-block;
+    }
+    .Right
+    {
+        display: inline-block;
+        width: 45%;
+        height: 100%;
+    }
+    .Info
+    {
+        position: relative;
+        width: 95%;
+        height: 30%;
+        
+        top:25%;
+        padding-left: 15%;
+        
+        font-family: 'OTWelcomeBA';
+        font-size: 7vmin;
+        color: aliceblue;
+
+
+    }
+    .Keyword
+    {
+        color: crimson;
+        font-size: 9vmin;
+        font-style: bold;
+    }
+    .dropDownMenu
+    {
+        color: crimson;
+        font-size: 9vmin;
+        font-style: bold;
+        background-color: transparent;
+    }
+    .dropDownOption
+    {
+        float: right;
+    }
+    .sliderSpan
+    {
+        margin-top: -80%;
+    }
+    .sliderLabel
+    {
+        font-size: 9vmin;
+        margin-left: -0%;
+    }
+    .simText
+    {
+        width: 20%;
+        color: crimson;
+        font-size: 9vmin;
+        font-style: bold;
+        background-color: transparent;
+        
+    }
+    .ImageSection
+    {
+
+        background-color: rgba(0, 0,0,0.4);
+        margin-left: 10%;
+        margin-top: 15%;
+        width: 80%;
+        height: 70%;
+
+        overflow: auto;
+        white-space: nowrap;
+    }
+    .ImageSection::-webkit-scrollbar 
+    {
+    width: 10px;
+    }
+    .ImageSection::-webkit-scrollbar-thumb 
+    {
+    background-color:crimson;
+    border-radius: 10px;
+    }
+    .ImageSection::-webkit-scrollbar-track 
+    {
+    background-color: grey;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 5px white;
+    }
+    .thumbnails
+    {
+        width: 100%;
+        height: 100%;
+        display: block;
+        margin: auto;
+
+    }
+    .button-59 {
+    position: relative;
+    top: 85%;
+    align-items: center;
+    background-color: #fff;
+    border: 0.3vmin solid #000;
+    box-sizing: border-box;
+    color: #000;
+    cursor: pointer;
+    display: inline-flex;
+    fill: #000;
+
+    font-size: 2vmin;
+    font-weight: 600;
+   
+    justify-content: center;
+    letter-spacing: -.8px;
+    width: 10vw;
+    height: 5vh;
+
+    outline: 0;
+    padding: 0 17px;
+    text-align: center;
+    text-decoration: none;
+    transition: all .3s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    }
+
+    .button-59:focus {
+    color: #171e29;
+    }
+
+    .button-59:hover {
+    border-color: crimson;
+    color: crimson;
+    fill: crimson;
+    }
+
+    .button-59:active {
+    border-color: crimson;
+    color: crimson;
+    fill: crimson;
+    }
+
+    @font-face 
+    {
+    font-family: 'OTWelcomeBA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/OTWelcomeBA.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    }
+    @keyframes fadein 
+    {
+        from 
+        {
+            opacity: 0;
+            transform: translate3d(0, 20%, 0);
+
+        }
+        to 
+        {
+            opacity: 1;
+            transform: translateZ(0);
+        }
+    }
+    @-moz-keyframes fadein 
+    { /* Firefox */
+        from 
+        {
+            opacity: 0;
+            transform: translate3d(0, 20%, 0);
+
+        }
+        to 
+        {
+            opacity: 1;
+            transform: translateZ(0);
+        }
+    }
+    @-webkit-keyframes fadein 
+    { /* Safari and Chrome */
+        from 
+        {
+            opacity: 0;
+            transform: translate3d(0, 20%, 0);
+
+        }
+        to 
+        {
+            opacity: 1;
+            transform: translateZ(0);
+        }
+    }
+    @-o-keyframes fadein 
+    { /* Opera */
+        from 
+        {
+            opacity: 0;
+            transform: translate3d(0, 20%, 0);
+
+        }
+        to 
+        {
+            opacity: 1;
+            transform: translateZ(0);
+        }
+    }
+</style>
+<script src="http://code.jquery.com/jquery-latest.js"></script> 
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width-device-width, initial-scale=1.0">
+        <title>
+                에러
+        </title>
+    </head>
+    <body class="Body">
+        <div class="Content">
+            <div class="Left">
+                <p class="Info" id="Info">
+                    유효하지 않은<br> 접근입니다.
+                </p>
+            </div>
+            <div class="Center">
+
+
+            </div>
+            <div class="Right">
+            </div>
+        </div>
+    </body>
+
+</html>
