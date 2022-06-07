@@ -4,6 +4,7 @@ import json
 from logging import exception
 from pickle import TRUE
 from textwrap import indent
+from venv import create
 from flask import Flask,flash, render_template
 from flask import request
 
@@ -35,6 +36,7 @@ def uploadExcelImplement():
     for key,value in sg_Shot_Fields.items():
         sg_FieldsAndName[value['name']['value']]=key
     
+   
     sg_UserNameToID={}                                                        #샷그리드 유저 로드
     for user in sg.find('HumanUser',[],['name']):                   #유저 아이디와 이름 맵핑
         sg_UserNameToID[user['name']]=int(user['id'])
@@ -48,12 +50,14 @@ def uploadExcelImplement():
         "FX":[".FX_assginee",".FX_date"],
         "3D":[".3D_assginee",".3D_date"],
         "RO/RI":[".RO/RI_assginee",".RO/RI_date"],
-        "2D":[".2D_assginee",".2D_date"]
+        "2D":[".2D_assginee",".2D_date"],
+        "Rt/Sc/Tf":[".Rt/Sc/Tf",".NONE"]
         }
     
     sg_CreatedTasks=[]                                                  #생성된 태스크 관리 리스트
     sg_CreatedShots=[]                                                  #생성된 샷 관리 리스트
     sg_CreatedSeqs=[]                                                   #생성된 시퀸스 관리 리스트
+
     try:
         for i in range(0,rowslen):
             dataDictForm={}                                 
@@ -65,8 +69,8 @@ def uploadExcelImplement():
                 if query+'['+val[0]+']' not in dataPassedFromHTML and query+'['+val[1]+']' not in dataPassedFromHTML:continue       #데이터에 assignee와 due_date가 존재하지 않는다면 건너뜀
                 if query+'['+val[0]+']' in dataPassedFromHTML:                                                        #데이터에 assignee가 존재한다면
                     for assignee in dataPassedFromHTML[query+'['+val[0]+']'].split(","):                              #str형태로 넘어온 유저데이터를 기반으로 각 유저 별로
-                        if assignee in sg_UserNameToID.keys():                                                    #샷그리드에서 조회한 유저 목록에 있는지를 판별 후
-                            sg_Assignees.append(sg_UserNameToID[assignee])                                           #유저 목록에 존재한다면 Assignees배열에 유저 id를 저장 
+                        if assignee in sg_UserNameToID.keys():                                                        #샷그리드에서 조회한 유저 목록에 있는지를 판별 후
+                            sg_Assignees.append(sg_UserNameToID[assignee])                                            #유저 목록에 존재한다면 Assignees배열에 유저 id를 저장 
                 if query+'['+val[1]+']' in dataPassedFromHTML:                                                        #데이터에 due_date가 존재한다면
                     due_date=dataPassedFromHTML[query+'['+val[1]+']']                                                 #날짜 데이터를 획득
                 
@@ -136,24 +140,23 @@ def uploadExcelImplement():
             if 'sg_shot_name' in dataDictForm:                                                              #sg_shot_name은 code로 변경
                 dataDictForm['code'] = dataDictForm['sg_shot_name']
                 del dataDictForm['sg_shot_name']
-            
+         
             dataDictForm['project']= {'type':'Project', 'id':projectID}                                     #html데이터엔 project관련부가 없어서 별도로 맵핑
-            
-            dataDictForm['tasks'] = sg_Tasks                                                                   #샷에 생성된 태스크들 맵핑
-            
+            dataDictForm['tasks'] = sg_Tasks                                                                #샷에 생성된 태스크들 맵핑
             shot=sg.create('Shot',dataDictForm)                                                             #샷 생성
             
+
             sg_CreatedShots.append(shot)                                                                    #샷관리 리스트에 추가
-            
-            for key,val in hyperlink.items():                                                           #첨부파일 처리
+            for key,val in hyperlink.items():                                                               #첨부파일 처리
                 sg.upload("Shot",shot['id'],val,key)
-    except shotgun_api3.ShotgunError as e:                                                              #에러 처리부
+    except shotgun_api3.ShotgunError as e:                                                                  #에러 처리부
         for task in sg_CreatedTasks:                                                                        #에러 발생시 생성된 엔티티들을 삭제
             sg.delete('Task',task['id'])
         for shot in sg_CreatedShots:
             sg.delete('Shot',shot['id'])
         for seq in sg_CreatedSeqs:
             sg.delete("Sequence",seq['id'])
+        print(e.__str__())
         return e.__str__()
         
     return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
