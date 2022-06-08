@@ -3,4 +3,5 @@
 3. D에 숫자값만 쓸것
 4. task 별 할당자 ','으로 구분하고 shotgrid에 등록되어 있는 유저만 쓸것
 5. Notice&Status 시트명 제외하고 전부 읽음, 엑셀 기준으로 Shot name이 비어있으면 데이터 인식안함.
-6. Thumbnail 이미지는 샷이름과 동일하게, 확장자는 ShotgridAMI.PY안에서 지정할 수 있음
+6. Thumbnail 이미지는 샷이름과 동일하게, 확장자는 ShotgridAMI.PY안에서 지정할 수 있음.
+7. 각, 필드 별 입력 가능한 값 샷그리드에서 조회하고 엑셀 만들 것.
