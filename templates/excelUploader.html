@@ -113,11 +113,16 @@
         background-color: transparent;
         
     }
-    .attachFile
+    .attach
     {
         color: white;
-        margin-top: 25%;
-        margin-left: 50%;
+        width: 15vmin;
+        height: 15vmin;
+    }
+    .textField
+    {
+        width: 50vmin;
+        height: 2.5vmin;
     }
     .ImageSection
     {
@@ -201,7 +206,11 @@
     }
     .refreshImg
     {
-        margin-left:-25%;
+        position: relative;
+        top: 25%;
+        left: 25%;
+        width: 30vmin;
+        height: 30vmin;
         color: crimson;
 
         -webkit-animation: rotating 2s linear infinite;
@@ -296,6 +305,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.5/xlsx.full.min.js"></script>
 <script type="text/javascript">
 
+
     //Shotgrid 필드명 -> excel 필드명으로 맵핑, "."으로 시작하는 필드명은 별도의 처리 필요 필드
     var keyMapping=
     {
@@ -338,15 +348,16 @@
         ".2D_assginee":"__EMPTY_22",
         ".2D_date":"__EMPTY_23"
     };
-    function excelExport(PID)
+
+    var dataArr= new Array();
+    function excelExport()
     {
         let input = event.target;
         let reader = new FileReader();
-        var dataArr= new Array();
+
         reader.onload = function () 
         {
-            var img="<image src='https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/blue_webpict30_1484337148-1.png' class='refreshImg'></image>"
-            $(".Content").append(img);
+
             let data = reader.result;
             let workBook = XLSX.read(data, { type: 'binary' });
             var parsedData=[]
@@ -371,12 +382,28 @@
                     }
                 }
             })
+        };
+        reader.readAsBinaryString(input.files[0]);
+    }
+    function Upload(PID)
+    {
 
+        var thumbnailpath= document.getElementById("textField").value;
+        console.log(thumbnailpath);
+
+        if(dataArr.length==0)
+        {
+            alert("유효한 엑셀을 첨부해주세요.")
+        }
+        else
+        {
+            var img="<image src='https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/blue_webpict30_1484337148-1.png' class='refreshImg'></image>"
+            $(".ImageSection").append(img);
             $.ajax({
                         type : "POST",
                         url : "/excelUploadImplement",
                         async : true,
-                        data : {'dataArr':dataArr,'len':dataArr.length,"ProjectID":PID} ,
+                        data : {'dataArr':dataArr,'len':dataArr.length,"ProjectID":PID,'thumbNailPath':thumbnailpath} ,
                         dataType : "json",
                         cache: false,
                         success: function(data)
@@ -390,8 +417,7 @@
                             window.close();
                         }  
                     }); 
-        };
-        reader.readAsBinaryString(input.files[0]);
+        }
     }
 </script>
 <html lang="en">
@@ -405,7 +431,21 @@
     </head>
     <body class="Body">
         <div class="Content">
-            <input class="attachFile" type="file" id="excelFile" accept=".xlsx" onchange="excelExport({{projectID}})"/>
+            <div class="Left">
+                <p class="Info" id="Info">
+                    <strong class="Keyword">엑셀</strong>첨부
+                    <input class="attach" type="file" id="excelFile" accept=".xlsx" onchange="excelExport()" placeholder="엑셀 파일을 선택해주세요"/><br>
+                    <strong class="Keyword">썸네일</strong>경로 설정<br>
+                    <input class="textField" id="textField" type='text'/>
+                </p>
+            </div>
+            <div class="Center" id="Center">
+                <button class="button-59" onclick="Upload({{projectID}})">Upload</button>
+            </div>
+            <div class="Right">
+                <div class="ImageSection">
+                </div>
+            </div>
         </div>
     </body>
 

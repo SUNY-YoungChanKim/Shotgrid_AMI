@@ -1,10 +1,5 @@
-
-from dataclasses import field
 import json
-from logging import exception
-from pickle import TRUE
-from textwrap import indent
-from venv import create
+import os
 from flask import Flask,flash, render_template
 from flask import request
 
@@ -28,11 +23,21 @@ def uploadExcel():
 @app.route('/excelUploadImplement',methods=['POST'])
 def uploadExcelImplement():
     
+    thumbnailsFileTypes = ["png","jpg","bmp"]                                    #썸네일 이미지 타입, 앞에서 부터 처리. 
+    
     dataPassedFromHTML=dict(request.form.to_dict())                               #html 데이터 로드
     rowslen=int(dataPassedFromHTML['len'])                                        #데이터 길이 로드
     projectID=int(dataPassedFromHTML['ProjectID'])                                #프로젝트 아이디 로드
-    sg_Shot_Fields=sg.schema_field_read('Shot')                             #Shot 필드목록 획득 
-    sg_FieldsAndName={}                                               #Shot필드 목록의 웹 상 필드명과 실제 필드명 맵핑
+    thumbnailsPath=dataPassedFromHTML['thumbNailPath']
+    
+    if(thumbnailsPath != ""):
+        if(os.path.isdir(thumbnailsPath) is False):
+            return "썸네일 경로가 잘못되었습니다."
+            
+    
+    
+    sg_Shot_Fields=sg.schema_field_read('Shot')                                   #Shot 필드목록 획득 
+    sg_FieldsAndName={}                                                           #Shot필드 목록의 웹 상 필드명과 실제 필드명 맵핑
     for key,value in sg_Shot_Fields.items():
         sg_FieldsAndName[value['name']['value']]=key
     
@@ -147,8 +152,16 @@ def uploadExcelImplement():
             
 
             sg_CreatedShots.append(shot)                                                                    #샷관리 리스트에 추가
+            
             for key,val in hyperlink.items():                                                               #첨부파일 처리
                 sg.upload("Shot",shot['id'],val,key)
+                
+            for fileType in thumbnailsFileTypes:
+                thumbnail = thumbnailsPath + '\\' + dataDictForm['code'] + "." + fileType
+                if(os.path.isfile(thumbnail)):
+                    sg.upload("Shot",shot['id'],thumbnail,'image')
+                    break
+                
     except shotgun_api3.ShotgunError as e:                                                                  #에러 처리부
         for task in sg_CreatedTasks:                                                                        #에러 발생시 생성된 엔티티들을 삭제
             sg.delete('Task',task['id'])
