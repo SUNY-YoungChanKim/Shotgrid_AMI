@@ -350,6 +350,7 @@
     };
 
     var dataArr= new Array();
+    var done=false;
     function excelExport()
     {
         let input = event.target;
@@ -387,6 +388,8 @@
     }
     function Upload(PID)
     {
+        if(done==false)done=true;
+        else return;
 
         var thumbnailpath= document.getElementById("textField").value;
         console.log(thumbnailpath);

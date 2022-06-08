@@ -23,7 +23,7 @@ def uploadExcel():
 @app.route('/excelUploadImplement',methods=['POST'])
 def uploadExcelImplement():
     
-    thumbnailsFileTypes = ["png","jpg","bmp"]                                    #썸네일 이미지 타입, 앞에서 부터 처리. 
+    thumbnailsFileTypes = ["png","jpg","bmp"]                                    #썸네일 이미지 확장자, 앞에서 부터 처리. 
     
     dataPassedFromHTML=dict(request.form.to_dict())                               #html 데이터 로드
     rowslen=int(dataPassedFromHTML['len'])                                        #데이터 길이 로드
@@ -72,12 +72,12 @@ def uploadExcelImplement():
                 sg_Assignees =[]
                 due_date= None                                       
                 if query+'['+val[0]+']' not in dataPassedFromHTML and query+'['+val[1]+']' not in dataPassedFromHTML:continue       #데이터에 assignee와 due_date가 존재하지 않는다면 건너뜀
-                if query+'['+val[0]+']' in dataPassedFromHTML:                                                        #데이터에 assignee가 존재한다면
-                    for assignee in dataPassedFromHTML[query+'['+val[0]+']'].split(","):                              #str형태로 넘어온 유저데이터를 기반으로 각 유저 별로
-                        if assignee in sg_UserNameToID.keys():                                                        #샷그리드에서 조회한 유저 목록에 있는지를 판별 후
-                            sg_Assignees.append(sg_UserNameToID[assignee])                                            #유저 목록에 존재한다면 Assignees배열에 유저 id를 저장 
-                if query+'['+val[1]+']' in dataPassedFromHTML:                                                        #데이터에 due_date가 존재한다면
-                    due_date=dataPassedFromHTML[query+'['+val[1]+']']                                                 #날짜 데이터를 획득
+                if query+'['+val[0]+']' in dataPassedFromHTML:                                                                      #데이터에 assignee가 존재한다면
+                    for assignee in dataPassedFromHTML[query+'['+val[0]+']'].split(","):                                            #str형태로 넘어온 유저데이터를 기반으로 각 유저 별로
+                        if assignee in sg_UserNameToID.keys():                                                                      #샷그리드에서 조회한 유저 목록에 있는지를 판별 후
+                            sg_Assignees.append(sg_UserNameToID[assignee])                                                          #유저 목록에 존재한다면 Assignees배열에 유저 id를 저장 
+                if query+'['+val[1]+']' in dataPassedFromHTML:                                                                      #데이터에 due_date가 존재한다면
+                    due_date=dataPassedFromHTML[query+'['+val[1]+']']                                                               #날짜 데이터를 획득
                 
                 sg_users=[]                                                                               
                 for assigned in sg_Assignees:                                                              #유저 아이디를 기반으로 할당해야 하는 shotgrid user entity를 로드                     
@@ -188,7 +188,7 @@ def delSequence():
             ]
             fields= ['code','shots']
 
-            sg_Seq=sg.find_one('Sequence',filters,fields)                                             #해당 프로젝트내에서 선택된 시퀸스의 code와 shots필드를 포함한 형태의 entity를 로드
+            sg_Seq=sg.find_one('Sequence',filters,fields)                                                #해당 프로젝트내에서 선택된 시퀸스의 code와 shots필드를 포함한 형태의 entity를 로드
             
             sg_Shots=sg_Seq['shots']                                                                     #시퀸스에 포함된 샷들로드
             for sg_Shot in sg_Shots:                      
@@ -199,8 +199,8 @@ def delSequence():
                     sg_Shot['image']="None"
                 else:                                                                                   #있을 시 URL맵핑
                     sg_Shot['image']=image
-                sg_Shot.pop('type')                                                                        #html에서 표기 안하기 위해 type필드 제거
-                req['shots'].append(sg_Shot)                                                               #샷 데이터 추가
+                sg_Shot.pop('type')                                                                     #html에서 표기 안하기 위해 type필드 제거
+                req['shots'].append(sg_Shot)                                                            #샷 데이터 추가
 
 
             sg_Seq.pop('shots')
